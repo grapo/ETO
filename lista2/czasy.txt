@@ -1,0 +1,11 @@
+Zadanie 1
+    Czas oszacowany 10 min
+    Czas rzeczywisty 15 min
+
+Zadanie 2
+    Czas oszacowany 20 min
+    Czas rzeczywisty 20 min
+
+Zadanie 3
+    Czas oszacowany 15 min
+    Czas rzeczywisty 10 min
