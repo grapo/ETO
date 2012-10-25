@@ -1,0 +1,30 @@
+Zestaw 3
+
+Zadanie 1
+    Czas oszacowany 10 min
+    Czas rzeczywisty 15 min
+
+Zadanie 2
+    Czas oszacowany 20 min
+    Czas rzeczywisty 20 min
+
+Zadanie 3
+    Czas oszacowany 15 min
+    Czas rzeczywisty 10 min
+
+
+Zestaw 4
+
+Zadanie 1
+    Czas oszacowany 25 min
+    Czas rzeczywisty 35 min
+
+    Przy okazji został zrobiony spory refactor
+
+Zadanie 2
+    Czas oszacowany 10 min
+    Czas rzeczywisty 12  min
+
+Zadanie 3
+    Czas oszacowany 5 min
+    Czas rzeczywisty 5 min

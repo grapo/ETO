@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 #
 # Piotr Grabowski
-# Michał Karpiński
-# ETO 2012 zestaw 3
+# ETO 2012
 #
 
 class Packet(object):
+    MAX_HOP = 16
     def __init__(self, sender=None, receiver=None, content=None):
         self.content = content
         self.receiver = receiver
         self.sender = sender
-
+        self._hopcounter = 0
         assert self.invariant()
 
     def invariant(self):
@@ -22,6 +22,12 @@ class Packet(object):
 
     def __str__(self):
         return self.content
+
+    def hop(self):
+        self._hopcounter += 1
+
+    def is_looped(self):
+        return self._hopcounter >= self.MAX_HOP
 
     @property
     def content(self):

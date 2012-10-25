@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 #
 # Piotr Grabowski
-# Michał Karpiński
-# ETO 2012 zestaw 3
+# ETO 2012
 #
 
-
+import logging
+logging.basicConfig(level=logging.INFO)
 
 class Node(object):
     def __init__(self, name, next_node=None):
@@ -34,17 +34,18 @@ class Node(object):
     def name(self):
         return self._name
 
-    def check_loop(self, packet):
-        if packet == self._last_packet:
-            raise Exception("Loop in LAN")
+    def drop_packet(self, packet):
+        pass
 
     def accept(self, packet):
-        self.check_loop(packet)
-
-        self._last_packet=packet
+        self._last_packet = packet
         if packet.receiver == self._name:
             self.accepted_packet(packet)
         else:
+            packet.hop()
+            if packet.is_looped():
+                self.drop_packet(packet)
+                return
             self.send(packet)
 
     def accepted_packet(self, packet):
@@ -57,7 +58,7 @@ class Node(object):
 
 class Workstation(Node):
     def accepted_packet(self, packet):
-        print "Received: %s" % (packet)
+        logging.info("Received: %s" % (packet))
 
     def originate(self, packet):
         packet.sender = self._name
@@ -66,15 +67,16 @@ class Workstation(Node):
 
 class Printer(Node):
     def accepted_packet(self, packet):
-        print "Print packet: %s" % (packet)
+        logging.info("Print packet: %s" % (packet))
+
 
 class Fileserver(Node):
     def __init__(self, *args, **kwargs):
-        super(Fileserver, self).__init__(self, *args, **kwargs)
+        super(Fileserver, self).__init__(*args, **kwargs)
         self.storage = []
 
     def accepted_packet(self, packet):
         self.storage.append(packet)
-        print "Save packet: %s" % (packet)
+        logging.info("Save packet: %s" % (packet))
 
 
