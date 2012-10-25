@@ -15,7 +15,13 @@ class Packet(object):
         assert self.invariant()
 
     def invariant(self):
-        return self.content and self.receiver and self.sender
+        return self.content and self.receiver
+    
+    def __unicode__(self):
+        return self.content
+
+    def __str__(self):
+        return self.content
 
     @property
     def content(self):
@@ -33,7 +39,6 @@ class Packet(object):
     def receiver(self, value):
         self._receiver = value
     
-
     @property
     def sender(self):
         return self._sender

@@ -1,0 +1,4 @@
+W mojej implementacji pakiet musi mieć nadawcę.
+Pakiet dopuszcza pustą wiadomość (pusty string)
+Nazwa workstation nie jest wymagana
+Metoda originate nadpisuje wysyłającego pakiet

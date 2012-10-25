@@ -7,7 +7,7 @@
 
 import unittest
 from packet import Packet
-from workstation import Workstation
+from workstation import Node, Workstation
 
 
 class PacketTest(unittest.TestCase):
@@ -22,23 +22,37 @@ class PacketTest(unittest.TestCase):
         with self.assertRaises(AssertionError):
             Packet(sender="sender", receiver="receiver")
 
-class WorkstationTest(unittest.TestCase):
+class NodeTest(unittest.TestCase):
+    def test_next_node_is_node(self):
+        n1 = Node(name="n1")
+        n2 = Node(name="n2")
+        try:
+            n1.next_node = n2
+        except:
+            self.fail('Exception should not be raised')
+    
+    def test_next_node_is_not_node(self):
+        n1 = Node(name="n1")
+        with self.assertRaises(AssertionError): 
+            n1.next_node = "n2"
+
     def test_has_not_next_node(self):
         w1 = Workstation(name="w1")
-        self.assertFalse(w1.hasNextNode())
+        self.assertFalse(w1.has_next_node())
     
     def test_has_next_node(self):
         w1 = Workstation(name="w1")
-        w2 = Workstation(name="w2", nextNode=w1)
-        self.assertTrue(w2.hasNextNode())
+        w2 = Workstation(name="w2", next_node=w1)
+        self.assertTrue(w2.has_next_node())
 
 
 class LanTest(unittest.TestCase):
     def setUp(self):
         self.mac = Workstation(name="mac")
-        self.sun = Workstation(name="sun", nextNode=self.mac)
-        self.pc = Workstation(name="pc", nextNode=self.sun)
-        self.mac.nextNode = self.pc
+        self.sun = Workstation(name="sun", next_node=self.mac)
+        self.node = Workstation(name="node", next_node=self.sun)
+        self.pc = Workstation(name="pc", next_node=self.node)
+        self.mac.next_node = self.pc
 
     def test_good_receiver_packet(self):
         p = Packet(content="x", sender="mac", receiver="sun")
