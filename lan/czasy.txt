@@ -28,3 +28,18 @@ Zadanie 2
 Zadanie 3
     Czas oszacowany 5 min
     Czas rzeczywisty 5 min
+
+Zestaw 5
+
+Zadanie 1
+    Czas oszacowany 10 min
+    Czas rzeczywisty 10 min
+
+Zadanie 2
+    Czas oszacowany 20 min
+    Czas rzeczywisty 25  min
+
+    Zadanie zrobione zgodnie ze specyfikacją, ale rozwiązanie jest w zasadzie bez sensu:
+    Klasa zawiera listę wszysktich nazw urządzeń które mogłyby znaleźć się w sieci.
+    Sprawdzam, który węzeł nie odebrał nadanego do niego pakietu jeśli ten pakiet wrócił 
+    do stacji nadającej.

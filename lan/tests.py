@@ -10,7 +10,7 @@ import unittest
 import logging
 
 from packet import Packet
-from node import Link, Workstation, Printer, Fileserver
+from node import Link, Workstation, Printer, Fileserver, Finder
 from node import Node as NodeBase
 
 # mock w celu testowanie metod NodeBase
@@ -19,13 +19,16 @@ class Node(NodeBase):
         pass
 
 class FunctionCalledChecker(object):
-   def __init__(self, method):
-     self.meth = method
-     self.was_called = False
+    """
+    Sprawdza czy funkcja została wywołana
+    """
+    def __init__(self, method):
+        self.meth = method
+        self.was_called = False
 
-   def __call__(self, *args, **kwargs):
-     self.meth(*args, **kwargs)
-     self.was_called = True
+    def __call__(self, *args, **kwargs):
+        self.meth(*args, **kwargs)
+        self.was_called = True
 
 
 class PacketTest(unittest.TestCase):
@@ -145,6 +148,32 @@ class LanTest(unittest.TestCase):
         self.mac.originate(p)
         self.assertEquals(p._hopcounter, Packet.MAX_HOP)
         
+class FinderTest(unittest.TestCase):
+    def setUp(self):
+        self.all_stations = ['mac', 'sun', 'printer', 'fileserver', 'pc', 'none']
+        self.present_stations = ['mac', 'sun', 'printer', 'fileserver', 'pc']
+        class MyFinder(Finder):
+            devices = self.all_stations
+        
+        self.mac = Workstation(name="mac")
+        self.sun = Workstation(name="sun", next_node=self.mac)
+        self.link = Link(name="link", next_node=self.sun)
+        self.printer = Printer(name="printer", next_node=self.link)
+        self.finder = MyFinder(name="finder", next_node=self.printer)
+        self.fileserver = Fileserver(name="fileserver", next_node=self.finder)
+        self.pc = Workstation(name="pc", next_node=self.fileserver)
+        self.mac.next_node = self.pc
+
+    def test_none_not_in_all_stations(self):
+        self.finder.check_all_nodes()
+        nodes = self.finder.list_devices()
+        self.assertTrue('none' not in set(nodes))
+        
+    def test_stations_in_all_stations(self):
+        self.finder.check_all_nodes()
+        nodes = self.finder.list_devices()
+        self.assertTrue(set(nodes) == set(self.present_stations))
+
 
 if __name__ == "__main__":
     logger = logging.getLogger()

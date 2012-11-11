@@ -7,6 +7,8 @@
 from abc import ABCMeta
 import logging
 logging.basicConfig(level=logging.INFO)
+from packet import Packet
+
 
 class Node(object):
     __metaclass__ = ABCMeta
@@ -87,10 +89,33 @@ class Fileserver(Node):
         logging.info("Save packet: %s" % (packet))
 
 
-class LanScanner(Node):
+class Finder(Workstation):
+    devices = []
     def __init__(self, *args, **kwargs):
-        self.devices = kwargs.get('devices', [])
-        super(LanScanner, self).__init__(*args, **kwargs)
+        super(Finder, self).__init__(*args, **kwargs)
+        self.not_verified_nodes = []
+
+    def check_all_nodes(self):
+        self.not_verified_nodes = []
+        for device in self.devices:
+            p = Packet(content="ping", receiver=device)
+            self.originate(p) 
+
+    def list_devices(self):
+        return set(self.devices) - set(self.not_verified_nodes)
+
+    def accept(self, packet):
+        self._last_packet = packet
+        if packet.receiver == self._name:
+            self.accepted_packet(packet)
+        else:
+            if packet.sender == self._name:
+                self.not_verified_nodes.append(packet.receiver)
+            packet.hop()
+            if packet.is_looped():
+                self.drop_packet(packet)
+                return
+            self.send(packet)
 
 
 
