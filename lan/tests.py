@@ -10,9 +10,13 @@ import unittest
 import logging
 
 from packet import Packet
-from node import Node, Workstation, Printer, Fileserver
+from node import Link, Workstation, Printer, Fileserver
+from node import Node as NodeBase
 
-
+# mock w celu testowanie metod NodeBase
+class Node(NodeBase):
+    def accepted_packet(self, packet):
+        pass
 
 class FunctionCalledChecker(object):
    def __init__(self, method):
@@ -118,8 +122,8 @@ class LanTest(unittest.TestCase):
     def setUp(self):
         self.mac = Workstation(name="mac")
         self.sun = Workstation(name="sun", next_node=self.mac)
-        self.node = Node(name="node", next_node=self.sun)
-        self.printer = Printer(name="printer", next_node=self.node)
+        self.link = Link(name="link", next_node=self.sun)
+        self.printer = Printer(name="printer", next_node=self.link)
         self.fileserver = Fileserver(name="fileserver", next_node=self.printer)
         self.pc = Workstation(name="pc", next_node=self.fileserver)
         self.mac.next_node = self.pc
@@ -144,5 +148,5 @@ class LanTest(unittest.TestCase):
 
 if __name__ == "__main__":
     logger = logging.getLogger()
-    logger.level = logging.WARNING
+    logger.level = logging.ERROR
     unittest.main()

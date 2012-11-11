@@ -4,11 +4,13 @@
 # Piotr Grabowski
 # ETO 2012
 #
-
+from abc import ABCMeta
 import logging
 logging.basicConfig(level=logging.INFO)
 
 class Node(object):
+    __metaclass__ = ABCMeta
+
     def __init__(self, name, next_node=None):
         self._name = name
         self.next_node = next_node
@@ -35,7 +37,7 @@ class Node(object):
         return self._name
 
     def drop_packet(self, packet):
-        pass
+        logging.warning("Lopped packet: %s" % (packet))
 
     def accept(self, packet):
         self._last_packet = packet
@@ -49,12 +51,17 @@ class Node(object):
             self.send(packet)
 
     def accepted_packet(self, packet):
-        pass
+        raise NotImplementedError("Subclasses should implement this!")
 
     def send(self, packet):
         if self.has_next_node():
             self.next_node.accept(packet)
 
+    
+class Link(Node):
+    def accepted_packet(self, packet):
+        raise TypeError("Can't accept any packet")
+    
 
 class Workstation(Node):
     def accepted_packet(self, packet):
@@ -78,5 +85,12 @@ class Fileserver(Node):
     def accepted_packet(self, packet):
         self.storage.append(packet)
         logging.info("Save packet: %s" % (packet))
+
+
+class LanScanner(Node):
+    def __init__(self, *args, **kwargs):
+        self.devices = kwargs.get('devices', [])
+        super(LanScanner, self).__init__(*args, **kwargs)
+
 
 
