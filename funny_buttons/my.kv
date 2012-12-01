@@ -1,0 +1,45 @@
+#:kivy 1.0.9
+
+<Line>:
+    canvas:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size          
+
+<Stave>:
+    line: line
+    sound_dots: sound_dots 
+    SoundDots:
+        id: sound_dots
+    
+    Line:
+        id: line
+        pos: 0, self.parent.y
+        size: 20, self.parent.height
+
+<Controller>:
+    stave: stave
+    orientation: 'vertical'
+    Stave:
+        id: stave
+        
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'Play'
+            size: 100, 100
+            on_press: root.start()
+        ToggleButton:
+            text: 'Sound 1'
+            group: 'sounds'
+            color: (1,0,0)
+        ToggleButton:
+            text: 'Sound 2'
+            group: 'sounds'
+            color: (0,1,0)
+        ToggleButton:
+            text: 'Sound 3'
+            group: 'sounds'
+            color: (0,0,1)
