@@ -8,3 +8,8 @@ Zestaw 8:
 Czas oszacowany: 2h
 Czas rzeczywisty: 2h
 
+Zestaw 9:
+
+zadanie 1:
+    Ponieważ w zestawie 8 zrefaktoryzowano kod w sposób wystarczający nie była potrzebna dalsza refaktoryzacja
+
